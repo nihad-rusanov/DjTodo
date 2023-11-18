@@ -1,0 +1,130 @@
+{% extends 'base.html' %} 
+{% block title %} Home {% endblock %} 
+{% block content%}
+<style>
+  .d-flex{
+    gap:10px;
+  }
+  body {
+    font-style: itapc;
+  }
+  
+</style>
+<div id="alert" class="alert" role="alert">
+</div>
+  <section class="vh-100">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col">
+          <div class="card" id="list1" style="border-radius: .75rem; background-color: #eff1f2;">
+            <div class="card-body py-4 px-4 px-md-5">
+
+              <p class="h1 text-center mt-3 mb-4 pb-3 text-primary">
+                <i class="fas fa-check-square me-1"></i>
+                <u>My Todos</u>
+              </p>
+
+              <div class="pb-2">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex flex-row align-items-center">
+                      <input id="input" type="text" class="form-control form-control-lg" id="exampleFormControlInput1"
+                        placeholder="Add new...">
+                      <a href="#!" data-mdb-toggle="tooltip" title="Set due date"><i
+                          class="fas fa-calendar-alt fa-lg me-3"></i></a>
+                      <div>
+                        <button id="add_btn" type="submit" class="btn btn-primary">Add</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <hr class="my-4">
+              {% if  user.is_authenticated %}
+                {% for todo in all_todos %}
+                  <ul  id="todos" class="list-group list-group-horizontal rounded-0 bg-transparent">
+                    <li
+                      class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
+                      <p class="lead fw-normal mb-0">{{ todo.content }}</p>
+                    </li>
+                    <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
+                      <div class="d-flex flex-row justify-content-end mb-1">
+                        <a href="{% url 'edit_todo' pk=todo.id %}" class="text-info" data-mdb-toggle="tooltip" title="Edit todo"><button type="button" class="btn btn-info">Edit</button></a>
+                        <a href="{% url 'delete_todo' pk=todo.id %}" class="text-danger" data-mdb-toggle="tooltip" title="Delete todo"><button type="button" class="btn btn-danger">Danger</button></a>
+                      </div>
+                      <div class="text-end text-muted">
+                          <p class="small mb-0 ">{{ todo.created_at | timesince  }} ago</p>
+                      </div>
+                    </li>
+                  </ul>
+                {% endfor %}
+              {% else %}
+                <div class="h-100 d-flex align-items-center justify-content-center"><h3>Please <a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Register</a></h3></div>
+              {% endif%}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+
+  document.getElementById('add_btn').addEventListener('click',function(event){
+      let value = document.getElementById('input').value
+      let alert_info = document.getElementById('alert')
+      console.log(value)
+      let data = {
+        data: value
+    };
+    fetch('/add_todo/', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken'),
+      },
+      body: JSON.stringify(data),
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.status == 'success'){
+      if (value == ''){
+        alert_info.classList.add('alert-warning')
+        alert_info.textContent = 'Add Something'
+        return ''
+      }
+      else{
+        alert_info.classList.add('alert-success')
+        alert_info.textContent = 'Added Todo'}
+      }
+    else{
+      alert_info.classList.add('alert-danger')
+      alert_info.textContent = 'You are not authorized'
+    }
+    function delete_alert() {
+      alert_info.classList.remove('alert-danger','alert-success','alert-warning')
+      alert_info.textContent = ''
+      location.reload()
+    }
+  
+  setTimeout(delete_alert, 1500);
+  })
+  .catch((error) => {console.error('Error', error);});})
+
+
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Check if the cookie name matches with the one we're looking for
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;}
+  </script>
+{% endblock %}
