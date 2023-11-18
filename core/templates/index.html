@@ -51,7 +51,7 @@
                     <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
                       <div class="d-flex flex-row justify-content-end mb-1">
                         <a href="{% url 'edit_todo' pk=todo.id %}" class="text-info" data-mdb-toggle="tooltip" title="Edit todo"><button type="button" class="btn btn-info">Edit</button></a>
-                        <a href="{% url 'delete_todo' pk=todo.id %}" class="text-danger" data-mdb-toggle="tooltip" title="Delete todo"><button type="button" class="btn btn-danger">Danger</button></a>
+                        <a href="{% url 'delete_todo' pk=todo.id %}" class="text-danger" data-mdb-toggle="tooltip" title="Delete todo"><button type="button" class="btn btn-danger">Delete</button></a>
                       </div>
                       <div class="text-end text-muted">
                           <p class="small mb-0 ">{{ todo.created_at | timesince  }} ago</p>
