@@ -4,30 +4,30 @@
 
 ## Installation
 
-### Firstly run this in terminal
+Firstly run this in terminal
 
 ``` git clone  git@github.com:nihad-rusanov/DjTodo.git ```
 
-### Then 
+Then 
 
 ``` cd djTodo ```
 
-### Create venv
+Create venv
 
 ``` py -m venv venv ```
 
-### Run venv
+Run venv
 
 ``` venv\Scripts\activate ```
 
-### Install dependencies
+Install dependencies
 
 ``` pip install -r requirements.txt ```
 
-### Then 
+Then 
 
 ``` py manage.py migrate ```
 
-### Finally
+Finally
 
 ``` py manage.py runserver ```
