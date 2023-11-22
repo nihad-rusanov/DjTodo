@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from .models import Todo
-from .forms import RegisterForm
+from .forms import RegisterForm,LoginForm
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
@@ -48,7 +48,7 @@ def register(request):
 def log_in(request):
     if request.user.is_authenticated:
         return redirect('index')
-    form = RegisterForm(request.POST or None)
+    form = LoginForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
             username = form.cleaned_data['username']
